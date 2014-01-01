@@ -8,52 +8,110 @@
 
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
+#import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
-@property (nonatomic) int flipCount;
-@property (strong, nonatomic) Deck *deck;
+@property (strong, nonatomic) CardMatchingGame *game;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *matchCountSegCon;
+@property (weak, nonatomic) IBOutlet UILabel *lastActionLabel;
 @end
 
 @implementation CardGameViewController
 
-- (void) setFlipCount:(int)flipCount
+- (CardMatchingGame *)game
 {
-    _flipCount = flipCount;
-    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-    NSLog(@"flipCount = %d", self.flipCount);
+    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                          usingDeck:[self createDeck]];
+    return _game;
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
-    if ([sender.currentTitle length])
+    //could move this assignment into the model
+    //(e.g., chooseCardAtIndex) and make isBegun readonly
+    if (!self.game.isBegun)
     {
-        [sender setBackgroundImage:[UIImage imageNamed:@"cardback"]
-                          forState:UIControlStateNormal];
-        [sender setTitle:@""
-                forState:UIControlStateNormal];
-        self.flipCount++;
-        
-    } else {
-        Card *card = [self.deck drawRandomCard];
-        //if card is nil, deck is empty
-        //deactivate flipping
-        if (card){
-            [sender setBackgroundImage:[UIImage imageNamed:@"cardfront"]
-                              forState:UIControlStateNormal];
-            [sender setTitle:card.contents
-                    forState:UIControlStateNormal];
-            self.flipCount++;
-        }
-        
+        self.game.begun = YES;
+        NSString *stringVal = [self.matchCountSegCon titleForSegmentAtIndex:self.matchCountSegCon.selectedSegmentIndex];
+        self.game.matchCount = [stringVal integerValue];
     }
+    
+    int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    [self.game chooseCardAtIndex:chosenButtonIndex];
+    [self updateUI];
     
 }
 
-- (Deck *)deck
+- (IBAction)touchDealButton:(id)sender {
+    //reset state of the game
+    //by stetting game to nil, this will cause game's getter
+    //to lazily instantite a new game
+    //is this a good solution? better than calling initializer?
+    self.game = nil;
+    
+    //enable segmented control / moved to updateUI
+    [self updateUI];
+}
+
+
+//going to try to only touch the UI here
+//use game state data for anything that needs to be updated
+- (void)updateUI
 {
-    if(!_deck)_deck = [self createDeck];
-    return _deck;
+    for (UIButton *cardButton in self.cardButtons)
+    {
+        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        Card *card = [self.game cardAtIndex:cardButtonIndex];
+        
+        [cardButton setTitle:[self titleForCard:card]
+                    forState:UIControlStateNormal];
+        
+        [cardButton setBackgroundImage:[self backgroundImageForCard:card]
+                              forState:UIControlStateNormal];
+        
+        cardButton.enabled = !card.isMatched;
+    }
+    
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    //only enable SegCon if game has not begun
+    self.matchCountSegCon.enabled = !self.game.isBegun;
+    
+    
+    //set lastAction label
+    if (self.game.lastScore == 0) {
+        self.lastActionLabel.text = self.game.lastCard.contents;
+    }
+    else if (self.game.lastScore > 0)
+    {
+        self.lastActionLabel.text = [NSString stringWithFormat:@"Matched %@ ",
+                                                       self.game.lastCard.contents];
+        for (Card *otherCard in self.game.lastOtherCards)
+            self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"%@ ", otherCard.contents];
+        
+        self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"for %d points. ", self.game.lastScore];
+        
+    }
+    else
+    {
+        self.lastActionLabel.text = [NSString stringWithFormat:@"%@ ",
+                                     self.game.lastCard.contents];
+        for (Card *otherCard in self.game.lastOtherCards)
+            self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"%@ ", otherCard.contents];
+        
+        self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"don't match! %d point penalty!", -(self.game.lastScore)];
+    }
+}
+
+- (NSString *)titleForCard:(Card *)card
+{
+    return (card.isChosen ? card.contents : @"");
+}
+
+- (UIImage *)backgroundImageForCard:(Card *)card
+{
+    return [UIImage imageNamed:(card.isChosen ? @"cardfront" :@"cardback")];
 }
 
 - (Deck *)createDeck

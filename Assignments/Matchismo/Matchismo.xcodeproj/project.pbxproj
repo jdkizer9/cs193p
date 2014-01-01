@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48296EFE1873D99E00B8142E /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 48296EFD1873D99E00B8142E /* CardMatchingGame.m */; };
 		488319891872F55700018873 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488319881872F55700018873 /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4883198B1872F55700018873 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4883198A1872F55700018873 /* CoreGraphics.framework */; };
 		4883198D1872F55700018873 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4883198C1872F55700018873 /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		48296EFC1873D99E00B8142E /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = SOURCE_ROOT; };
+		48296EFD1873D99E00B8142E /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = SOURCE_ROOT; };
 		488319851872F55700018873 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		488319881872F55700018873 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4883198A1872F55700018873 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -168,6 +171,8 @@
 		48BFBCD81873004400115323 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				48296EFC1873D99E00B8142E /* CardMatchingGame.h */,
+				48296EFD1873D99E00B8142E /* CardMatchingGame.m */,
 				48BE2FFC18739569001A73E4 /* Deck.h */,
 				48BE2FFD18739569001A73E4 /* Deck.m */,
 				48BFBCD51873001600115323 /* Card.h */,
@@ -282,6 +287,7 @@
 				48BE2FFE18739569001A73E4 /* Deck.m in Sources */,
 				488319991872F55700018873 /* CardGameAppDelegate.m in Sources */,
 				4883199F1872F55700018873 /* CardGameViewController.m in Sources */,
+				48296EFE1873D99E00B8142E /* CardMatchingGame.m in Sources */,
 				48BE300418739D06001A73E4 /* PlayingCardDeck.m in Sources */,
 				488319951872F55700018873 /* main.m in Sources */,
 				48BFBCD71873001600115323 /* Card.m in Sources */,
@@ -415,6 +421,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchismo/Matchismo-Prefix.pch";
 				INFOPLIST_FILE = "Matchismo/Matchismo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -430,6 +437,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchismo/Matchismo-Prefix.pch";
 				INFOPLIST_FILE = "Matchismo/Matchismo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
