@@ -7,8 +7,8 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
+
 
 @interface CardGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
@@ -26,6 +26,13 @@
                                                           usingDeck:[self createDeck]];
     return _game;
 }
+
+//abstract
+- (Deck *)createDeck
+{
+    return nil;
+}
+
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
@@ -114,10 +121,6 @@
     return [UIImage imageNamed:(card.isChosen ? @"cardfront" :@"cardback")];
 }
 
-- (Deck *)createDeck
-{
-    return [[PlayingCardDeck alloc] init];
-}
 
 
 @end
