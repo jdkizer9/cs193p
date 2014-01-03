@@ -15,14 +15,13 @@
 
 //designated Initializer
 - (instancetype)initWithCardCount:(NSUInteger)count
-                        usingDeck:(Deck *)deck;
+                        usingDeck:(Deck *)deck
+                       matchCount:(NSInteger)matchCount;
 
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (nonatomic, readonly) NSInteger score;
-@property (nonatomic) NSInteger matchCount;
-@property (nonatomic, getter = isBegun) BOOL begun;
 @property (strong, nonatomic) CardGameHistoryLog* historyLog;
 
 

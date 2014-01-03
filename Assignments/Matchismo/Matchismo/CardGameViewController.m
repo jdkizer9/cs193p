@@ -8,6 +8,7 @@
 
 #import "CardGameViewController.h"
 #import "CardMatchingGame.h"
+#import "CardGameHistoryViewController.h"
 #import "CardGameHistoryLog.h"
 #import "CardGameHistoryEntry.h"
 
@@ -16,8 +17,6 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *matchCountSegCon;
-@property (weak, nonatomic) IBOutlet UILabel *lastActionLabel;
 @end
 
 @implementation CardGameViewController
@@ -32,27 +31,15 @@
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                          usingDeck:[self createDeck]];
+                                                          usingDeck:[self createDeck]
+                                                         matchCount:[self matchCount]];
     return _game;
 }
 
-//abstract
-- (Deck *)createDeck
-{
-    return nil;
-}
 
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
-    //could move this assignment into the model
-    //(e.g., chooseCardAtIndex) and make isBegun readonly
-    if (!self.game.isBegun)
-    {
-        self.game.begun = YES;
-        NSString *stringVal = [self.matchCountSegCon titleForSegmentAtIndex:self.matchCountSegCon.selectedSegmentIndex];
-        self.game.matchCount = [stringVal integerValue];
-    }
     
     int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
@@ -67,10 +54,35 @@
     //is this a good solution? better than calling initializer?
     self.game = nil;
     
-    //enable segmented control / moved to updateUI
     [self updateUI];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:[self historySegueIDName]])
+    {
+        if ([segue.destinationViewController isKindOfClass:[CardGameHistoryViewController class]])
+        {
+            CardGameHistoryViewController *cghVC = (CardGameHistoryViewController *)segue.destinationViewController;
+            
+            NSMutableAttributedString *historyAS = [[NSMutableAttributedString alloc] init];
+            
+            //iterate over all entries in the log
+            int i=0;
+            for (CardGameHistoryEntry *entry in self.game.historyLog.log)
+            {
+                i++;
+                [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d: ", i]]];
+                [historyAS appendAttributedString:[self attributedStringFromCardGameHistoryEntry:entry]];
+                [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+            }
+            if (i==0)
+                [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:@"New Game"]];
+            
+            cghVC.historyText = historyAS;
+        }
+    }
+}
 
 //going to try to only touch the UI here
 //use game state data for anything that needs to be updated
@@ -81,75 +93,42 @@
         int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         
-        [cardButton setTitle:[self titleForCard:card]
-                    forState:UIControlStateNormal];
-        
-        [cardButton setBackgroundImage:[self backgroundImageForCard:card]
-                              forState:UIControlStateNormal];
+        [self updateCardButton:cardButton forCard:card];
         
         cardButton.enabled = !card.isMatched;
     }
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    //only enable SegCon if game has not begun
-    self.matchCountSegCon.enabled = !self.game.isBegun;
-    
-    [self updateLastLabel];
 
 }
 
-
+//ABSTRACT METHODS
 //abstract
-- (NSString *)textDescriptionOfCard:(Card*)card
+- (Deck *)createDeck
 {
     return nil;
 }
 
-- (void)updateLastLabel
+//abstract
+- (void)updateCardButton:(UIButton *)cardButton
+                 forCard:(Card*)card
 {
-    CardGameHistoryEntry *entry = [self.game.historyLog.log lastObject];
-    self.lastActionLabel.text = @"New Game!!";
     
-    if (entry)
-    {
-        NSString *labelString;
-        if (entry.score == 0)
-        {
-            Card *card = [entry.cards lastObject];
-            
-            //generic CardGameViewController has no idea how to represent whatever
-            //type of card it is. Ensure the subclass view controller translates
-            labelString = [self textDescriptionOfCard:card];
-        }
-        else if(entry.score > 0)
-        {
-            labelString = @"Matched ";
-            for (Card *card in entry.cards)
-                labelString = [labelString stringByAppendingFormat:@"%@ ", [self textDescriptionOfCard:card]];
-            labelString = [labelString stringByAppendingFormat:@"for %d points.", entry.score];
-        }
-        else
-        {
-            labelString = @"";
-            for (Card *card in entry.cards)
-                labelString = [labelString stringByAppendingFormat:@"%@ ", [self textDescriptionOfCard:card]];
-            labelString = [labelString stringByAppendingFormat:@"don't match! %d point penalty!", entry.score];
-        }
-        
-        self.lastActionLabel.text = labelString;
-        
-    }
 }
 
-- (NSString *)titleForCard:(Card *)card
+//abstract
+- (NSAttributedString *) attributedStringFromCardGameHistoryEntry:(CardGameHistoryEntry *)entry
 {
-    return (card.isChosen ? card.contents : @"");
+    return nil;
 }
 
-- (UIImage *)backgroundImageForCard:(Card *)card
+//abstract
+- (NSString *)historySegueIDName
 {
-    return [UIImage imageNamed:(card.isChosen ? @"cardfront" :@"cardback")];
+    return nil;
 }
+//END ABSTRACT METHODS
+
 
 
 

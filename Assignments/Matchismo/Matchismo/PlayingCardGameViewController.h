@@ -11,6 +11,15 @@
 
 @interface PlayingCardGameViewController : CardGameViewController
 
-- (Deck *)createDeck;
+//inherits from CardGameViewController
+//must implement the following methods and properties
+//- (Deck *)createDeck;
+//- (void)updateCardButton:(UIButton *)cardButton forCard:(Card*)card;
+//- (NSAttributedString *) attributedStringFromCardGameHistoryEntry:(CardGameHistoryEntry *)entry;
+//- (NSString *)historySegueIDName;
+//@property (nonatomic, readonly) NSInteger matchCount;
+
+
+#define PLAYING_CARD_GAME_MATCH_COUNT 2
 
 @end

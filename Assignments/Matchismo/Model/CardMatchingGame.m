@@ -13,6 +13,7 @@
 @property (nonatomic, readwrite) NSInteger score;
 @property (nonatomic, strong) NSMutableArray *cards; //of Cards
 @property (strong, nonatomic, readwrite) NSString *lastAction;
+@property (nonatomic, readwrite) NSInteger matchCount;
 @end
 
 @implementation CardMatchingGame
@@ -31,12 +32,16 @@
 
 - (instancetype) initWithCardCount:(NSUInteger)count
                          usingDeck:(Deck *)deck
+                        matchCount:(NSInteger)matchCount
+
+
 {
     self = [super init];
     if (self)
     {
         for(int i=0; i<count; i++)
         {
+            self.matchCount = matchCount;
             Card *card = [deck drawRandomCard];
             if (card)
             {
