@@ -7,6 +7,7 @@
 //
 
 #import "CardMatchingGame.h"
+#import "CardGameHistoryEntry.h"
 
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
@@ -20,6 +21,12 @@
 {
     if (!_cards) _cards = [[NSMutableArray alloc] init];
     return _cards;
+}
+
+- (CardGameHistoryLog *)historyLog
+{
+    if (!_historyLog) _historyLog = [[CardGameHistoryLog alloc] init];
+    return _historyLog;
 }
 
 - (instancetype) initWithCardCount:(NSUInteger)count
@@ -57,9 +64,7 @@ static const int COST_TO_CHOOSE = 1;
 - (void)chooseCardAtIndex:(NSUInteger)index
 {
     Card *card = [self cardAtIndex:index];
-    self.lastCard = card;
-    self.lastScore = 0;
-    self.lastOtherCards = nil;
+    NSInteger moveScore = 0;
     
     if (!card.isMatched)
     {
@@ -85,7 +90,7 @@ static const int COST_TO_CHOOSE = 1;
                         if (matchScore)
                         {
                             //if a match was found, update score
-                            self.lastScore = matchScore * MATCH_BONUS;
+                            moveScore = matchScore * MATCH_BONUS;
                             card.matched = YES;
                             for (Card *anotherCard in matchArray)
                             {
@@ -94,16 +99,19 @@ static const int COST_TO_CHOOSE = 1;
                         }
                         else
                         {
-                            self.lastScore = -MISMATCH_PENALTY;
+                            moveScore = -MISMATCH_PENALTY;
                             for (Card *anotherCard in matchArray)
                             {
                                 anotherCard.chosen = NO;
                             }
 
                         }
+                        self.score += moveScore;
                         
-                        self.score += self.lastScore;
-                        self.lastOtherCards = [NSArray arrayWithArray:matchArray];
+                        //add card to matchArray for history entry
+                        [matchArray addObject:card];
+                        CardGameHistoryEntry *entry = [[CardGameHistoryEntry alloc] initEntryWithCards:matchArray score:moveScore];
+                        [self.historyLog addCardGameHistoryEntry: entry];
                         break;
                         
                     }
@@ -112,6 +120,13 @@ static const int COST_TO_CHOOSE = 1;
             }
             self.score -= COST_TO_CHOOSE;
             card.chosen = YES;
+            
+            if (!moveScore)
+            {
+                //add history entry
+                CardGameHistoryEntry *entry = [[CardGameHistoryEntry alloc] initEntryWithCards:@[card] score:moveScore];
+                [self.historyLog addCardGameHistoryEntry: entry];
+            }
         }
     }
     

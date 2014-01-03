@@ -19,4 +19,15 @@
     return [[PlayingCardDeck alloc] init];
 }
 
+
+- (NSString *)textDescriptionOfCard:(Card*)card
+{
+    //check to see if PlayingCard
+    if ([card isKindOfClass:[PlayingCard class]])
+    {
+        return [NSString stringWithString: card.contents];
+    } else
+        return nil;
+}
+
 @end

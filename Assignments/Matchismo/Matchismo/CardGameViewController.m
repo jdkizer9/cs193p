@@ -8,6 +8,8 @@
 
 #import "CardGameViewController.h"
 #import "CardMatchingGame.h"
+#import "CardGameHistoryLog.h"
+#import "CardGameHistoryEntry.h"
 
 
 @interface CardGameViewController ()
@@ -20,6 +22,13 @@
 
 @implementation CardGameViewController
 
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self updateUI];
+    
+}
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
@@ -85,29 +94,50 @@
     //only enable SegCon if game has not begun
     self.matchCountSegCon.enabled = !self.game.isBegun;
     
+    [self updateLastLabel];
+
+}
+
+
+//abstract
+- (NSString *)textDescriptionOfCard:(Card*)card
+{
+    return nil;
+}
+
+- (void)updateLastLabel
+{
+    CardGameHistoryEntry *entry = [self.game.historyLog.log lastObject];
+    self.lastActionLabel.text = @"New Game!!";
     
-    //set lastAction label
-    if (self.game.lastScore == 0) {
-        self.lastActionLabel.text = self.game.lastCard.contents;
-    }
-    else if (self.game.lastScore > 0)
+    if (entry)
     {
-        self.lastActionLabel.text = [NSString stringWithFormat:@"Matched %@ ",
-                                                       self.game.lastCard.contents];
-        for (Card *otherCard in self.game.lastOtherCards)
-            self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"%@ ", otherCard.contents];
+        NSString *labelString;
+        if (entry.score == 0)
+        {
+            Card *card = [entry.cards lastObject];
+            
+            //generic CardGameViewController has no idea how to represent whatever
+            //type of card it is. Ensure the subclass view controller translates
+            labelString = [self textDescriptionOfCard:card];
+        }
+        else if(entry.score > 0)
+        {
+            labelString = @"Matched ";
+            for (Card *card in entry.cards)
+                labelString = [labelString stringByAppendingFormat:@"%@ ", [self textDescriptionOfCard:card]];
+            labelString = [labelString stringByAppendingFormat:@"for %d points.", entry.score];
+        }
+        else
+        {
+            labelString = @"";
+            for (Card *card in entry.cards)
+                labelString = [labelString stringByAppendingFormat:@"%@ ", [self textDescriptionOfCard:card]];
+            labelString = [labelString stringByAppendingFormat:@"don't match! %d point penalty!", entry.score];
+        }
         
-        self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"for %d points. ", self.game.lastScore];
+        self.lastActionLabel.text = labelString;
         
-    }
-    else
-    {
-        self.lastActionLabel.text = [NSString stringWithFormat:@"%@ ",
-                                     self.game.lastCard.contents];
-        for (Card *otherCard in self.game.lastOtherCards)
-            self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"%@ ", otherCard.contents];
-        
-        self.lastActionLabel.text = [self.lastActionLabel.text stringByAppendingFormat:@"don't match! %d point penalty!", -(self.game.lastScore)];
     }
 }
 

@@ -9,11 +9,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Deck.h"
+#import "Card.h"
 
 @interface CardGameViewController : UIViewController
 
 // protected
 // subclass must implement
 - (Deck *)createDeck; //abstract
+- (NSString *)textDescriptionOfCard:(Card*)card;
 
 @end

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		480D41571875AEED00FC470E /* PlayingCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 480D41561875AEED00FC470E /* PlayingCardGameViewController.m */; };
+		480D415A1876370100FC470E /* CardGameHistoryEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 480D41591876370100FC470E /* CardGameHistoryEntry.m */; };
+		480D415D18763B5F00FC470E /* CardGameHistoryLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 480D415C18763B5F00FC470E /* CardGameHistoryLog.m */; };
 		48296EFE1873D99E00B8142E /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 48296EFD1873D99E00B8142E /* CardMatchingGame.m */; };
 		488319891872F55700018873 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488319881872F55700018873 /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4883198B1872F55700018873 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4883198A1872F55700018873 /* CoreGraphics.framework */; };
@@ -42,6 +44,10 @@
 /* Begin PBXFileReference section */
 		480D41551875AEED00FC470E /* PlayingCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardGameViewController.h; sourceTree = "<group>"; };
 		480D41561875AEED00FC470E /* PlayingCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardGameViewController.m; sourceTree = "<group>"; };
+		480D41581876370100FC470E /* CardGameHistoryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardGameHistoryEntry.h; path = Model/CardGameHistoryEntry.h; sourceTree = SOURCE_ROOT; };
+		480D41591876370100FC470E /* CardGameHistoryEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardGameHistoryEntry.m; path = Model/CardGameHistoryEntry.m; sourceTree = SOURCE_ROOT; };
+		480D415B18763B5F00FC470E /* CardGameHistoryLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardGameHistoryLog.h; path = Model/CardGameHistoryLog.h; sourceTree = SOURCE_ROOT; };
+		480D415C18763B5F00FC470E /* CardGameHistoryLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardGameHistoryLog.m; path = Model/CardGameHistoryLog.m; sourceTree = SOURCE_ROOT; };
 		48296EFC1873D99E00B8142E /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = SOURCE_ROOT; };
 		48296EFD1873D99E00B8142E /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = SOURCE_ROOT; };
 		488319851872F55700018873 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +184,10 @@
 			children = (
 				48296EFC1873D99E00B8142E /* CardMatchingGame.h */,
 				48296EFD1873D99E00B8142E /* CardMatchingGame.m */,
+				480D415B18763B5F00FC470E /* CardGameHistoryLog.h */,
+				480D415C18763B5F00FC470E /* CardGameHistoryLog.m */,
+				480D41581876370100FC470E /* CardGameHistoryEntry.h */,
+				480D41591876370100FC470E /* CardGameHistoryEntry.m */,
 				48BE2FFC18739569001A73E4 /* Deck.h */,
 				48BE2FFD18739569001A73E4 /* Deck.m */,
 				48BFBCD51873001600115323 /* Card.h */,
@@ -293,6 +303,8 @@
 				488319991872F55700018873 /* CardGameAppDelegate.m in Sources */,
 				4883199F1872F55700018873 /* CardGameViewController.m in Sources */,
 				48296EFE1873D99E00B8142E /* CardMatchingGame.m in Sources */,
+				480D415D18763B5F00FC470E /* CardGameHistoryLog.m in Sources */,
+				480D415A1876370100FC470E /* CardGameHistoryEntry.m in Sources */,
 				48BE300418739D06001A73E4 /* PlayingCardDeck.m in Sources */,
 				488319951872F55700018873 /* main.m in Sources */,
 				48BFBCD71873001600115323 /* Card.m in Sources */,

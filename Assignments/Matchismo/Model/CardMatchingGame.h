@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Deck.h"
-#import "card.h"
+#import "Card.h"
+#import "CardGameHistoryLog.h"
 
 @interface CardMatchingGame : NSObject
 
@@ -22,10 +23,7 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic) NSInteger matchCount;
 @property (nonatomic, getter = isBegun) BOOL begun;
-//@property (strong, nonatomic, readonly) NSString *lastAction;
-@property (nonatomic) NSInteger lastScore;
-@property (strong, nonatomic) Card *lastCard;
-@property (strong, nonatomic) NSArray *lastOtherCards;
+@property (strong, nonatomic) CardGameHistoryLog* historyLog;
 
 
 @end
