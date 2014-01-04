@@ -72,7 +72,7 @@
             for (CardGameHistoryEntry *entry in self.game.historyLog.log)
             {
                 i++;
-                [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d: ", i]]];
+                [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d: ", i] attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody]}]];
                 [historyAS appendAttributedString:[self attributedStringFromCardGameHistoryEntry:entry]];
                 [historyAS appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
             }

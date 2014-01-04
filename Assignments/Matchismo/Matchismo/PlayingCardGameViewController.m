@@ -64,7 +64,7 @@
             assert([card isKindOfClass:[PlayingCard class]]);
             labelString = [labelString stringByAppendingFormat:@"%@ ", [self textDescriptionOfCard:card]];
         }
-        labelString = [labelString stringByAppendingFormat:@"don't match! %d point penalty!", entry.score];
+        labelString = [labelString stringByAppendingFormat:@"don't match! %d point penalty!", -entry.score];
     }
     
     return [[NSMutableAttributedString alloc] initWithString:labelString];
