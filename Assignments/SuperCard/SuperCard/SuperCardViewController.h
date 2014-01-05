@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Deck.h"
+#import "CardView.h"
+#import "Card.h"
+
 @interface SuperCardViewController : UIViewController
+
+- (Deck *)createDeck;
+- (void)updateCardView:(CardView *)cardView forCard:(Card*)card;
 
 @end

@@ -17,6 +17,10 @@
 		481E44EB1878DBE100AD0634 /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44E01878DBE100AD0634 /* PlayingCardDeck.m */; };
 		481E44EC1878DBE100AD0634 /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44E21878DBE100AD0634 /* SetCard.m */; };
 		481E44ED1878DBE100AD0634 /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44E41878DBE100AD0634 /* SetCardDeck.m */; };
+		481E44F01878FF5D00AD0634 /* SuperPlayingCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44EF1878FF5D00AD0634 /* SuperPlayingCardViewController.m */; };
+		481E44F31879024A00AD0634 /* CardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44F21879024A00AD0634 /* CardView.m */; };
+		481E44F618790F7D00AD0634 /* SetCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44F518790F7D00AD0634 /* SetCardView.m */; };
+		481E44F918790FA000AD0634 /* SuperSetCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 481E44F818790FA000AD0634 /* SuperSetCardViewController.m */; };
 		48ED95FF1878B32E00A8B938 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48ED95FE1878B32E00A8B938 /* Foundation.framework */; };
 		48ED96011878B32E00A8B938 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48ED96001878B32E00A8B938 /* CoreGraphics.framework */; };
 		48ED96031878B32E00A8B938 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48ED96021878B32E00A8B938 /* UIKit.framework */; };
@@ -63,6 +67,14 @@
 		481E44E21878DBE100AD0634 /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCard.m; sourceTree = "<group>"; };
 		481E44E31878DBE100AD0634 /* SetCardDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardDeck.h; sourceTree = "<group>"; };
 		481E44E41878DBE100AD0634 /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardDeck.m; sourceTree = "<group>"; };
+		481E44EE1878FF5D00AD0634 /* SuperPlayingCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperPlayingCardViewController.h; sourceTree = "<group>"; };
+		481E44EF1878FF5D00AD0634 /* SuperPlayingCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuperPlayingCardViewController.m; sourceTree = "<group>"; };
+		481E44F11879024A00AD0634 /* CardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
+		481E44F21879024A00AD0634 /* CardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardView.m; sourceTree = "<group>"; };
+		481E44F418790F7D00AD0634 /* SetCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardView.h; sourceTree = "<group>"; };
+		481E44F518790F7D00AD0634 /* SetCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardView.m; sourceTree = "<group>"; };
+		481E44F718790FA000AD0634 /* SuperSetCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperSetCardViewController.h; sourceTree = "<group>"; };
+		481E44F818790FA000AD0634 /* SuperSetCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuperSetCardViewController.m; sourceTree = "<group>"; };
 		48ED95FB1878B32E00A8B938 /* SuperCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48ED95FE1878B32E00A8B938 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		48ED96001878B32E00A8B938 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -169,10 +181,18 @@
 			isa = PBXGroup;
 			children = (
 				48ED96101878B32E00A8B938 /* Main.storyboard */,
+				481E44F11879024A00AD0634 /* CardView.h */,
+				481E44F21879024A00AD0634 /* CardView.m */,
 				48ED96331878B3E300A8B938 /* PlayingCardView.h */,
 				48ED96341878B3E300A8B938 /* PlayingCardView.m */,
+				481E44F418790F7D00AD0634 /* SetCardView.h */,
+				481E44F518790F7D00AD0634 /* SetCardView.m */,
 				48ED96131878B32E00A8B938 /* SuperCardViewController.h */,
 				48ED96141878B32E00A8B938 /* SuperCardViewController.m */,
+				481E44EE1878FF5D00AD0634 /* SuperPlayingCardViewController.h */,
+				481E44EF1878FF5D00AD0634 /* SuperPlayingCardViewController.m */,
+				481E44F718790FA000AD0634 /* SuperSetCardViewController.h */,
+				481E44F818790FA000AD0634 /* SuperSetCardViewController.m */,
 				481E44D01878D40F00AD0634 /* Images.xcassets */,
 				481E44D21878DBE100AD0634 /* Model */,
 				48ED96051878B32E00A8B938 /* Supporting Files */,
@@ -313,15 +333,19 @@
 				481E44E61878DBE100AD0634 /* CardGameHistoryEntry.m in Sources */,
 				481E44EC1878DBE100AD0634 /* SetCard.m in Sources */,
 				48ED960F1878B32E00A8B938 /* SuperCardAppDelegate.m in Sources */,
+				481E44F01878FF5D00AD0634 /* SuperPlayingCardViewController.m in Sources */,
 				48ED96351878B3E300A8B938 /* PlayingCardView.m in Sources */,
 				481E44E81878DBE100AD0634 /* CardMatchingGame.m in Sources */,
 				48ED960B1878B32E00A8B938 /* main.m in Sources */,
 				481E44EB1878DBE100AD0634 /* PlayingCardDeck.m in Sources */,
+				481E44F618790F7D00AD0634 /* SetCardView.m in Sources */,
 				481E44ED1878DBE100AD0634 /* SetCardDeck.m in Sources */,
 				481E44E71878DBE100AD0634 /* CardGameHistoryLog.m in Sources */,
 				481E44E91878DBE100AD0634 /* Deck.m in Sources */,
+				481E44F31879024A00AD0634 /* CardView.m in Sources */,
 				481E44EA1878DBE100AD0634 /* PlayingCard.m in Sources */,
 				48ED96151878B32E00A8B938 /* SuperCardViewController.m in Sources */,
+				481E44F918790FA000AD0634 /* SuperSetCardViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

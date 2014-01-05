@@ -8,26 +8,29 @@
 
 #import "SuperCardViewController.h"
 #import "PlayingCardView.h"
-#import "PlayingCardDeck.h"
-#import "PlayingCard.h"
+//#import "PlayingCardDeck.h"
+//#import "PlayingCard.h"
+//#import "SetCardDeck.h"
+//#import "SetCard.h"
 
 @interface SuperCardViewController ()
-@property (weak, nonatomic) IBOutlet PlayingCardView *playingCardView;
+@property (weak, nonatomic) IBOutlet CardView *cardView;
 @property (strong, nonatomic) Deck *deck;
 
 @end
 
 @implementation SuperCardViewController
 
+
 - (Deck *)deck
 {
-    if (!_deck) _deck = [[PlayingCardDeck alloc] init];
+    if (!_deck) _deck = [self createDeck];
     return _deck;
 }
 
 - (IBAction)swipe:(UISwipeGestureRecognizer *)sender {
-    self.playingCardView.faceUp = !self.playingCardView.faceUp;
-    if (!self.playingCardView.faceUp) [self drawRandomPlayingCard];
+    self.cardView.faceUp = !self.cardView.faceUp;
+    if (!self.cardView.faceUp) [self drawRandomCard];
 }
 
 - (void)viewDidLoad
@@ -35,23 +38,33 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.playingCardView.suit = @"♥";
-    self.playingCardView.rank = 13;
+    [self drawRandomCard];
     
-    [self drawRandomPlayingCard];
-    
-    [self.playingCardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.playingCardView action:@selector(pinch:)]];
-    
-    
+    [self.cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.cardView action:@selector(pinch:)]];
 }
 
-- (void)drawRandomPlayingCard
+
+- (void)drawRandomCard
 {
     Card *card = [self.deck drawRandomCard];
-    if ([card isKindOfClass:[PlayingCard class]]) {
-        PlayingCard *playingCard = (PlayingCard *)card;
-        self.playingCardView.rank = playingCard.rank;
-        self.playingCardView.suit = playingCard.suit;
-    }
+    [self updateCardView:self.cardView forCard:card];
 }
+
+#pragma mark - Begin Abstract Methods
+- (Deck *)createDeck
+{
+    return nil;
+}
+
+- (CardView *)createCardView
+{
+    return nil;
+}
+
+- (void)updateCardView:(CardView *)cardView forCard:(Card*)card
+{
+}
+
+#pragma mark - End Abstract Methods
+
 @end

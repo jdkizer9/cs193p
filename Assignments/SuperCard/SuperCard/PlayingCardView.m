@@ -8,29 +8,9 @@
 
 #import "PlayingCardView.h"
 
-@interface PlayingCardView()
-@property (nonatomic) CGFloat faceCardScaleFactor;
-@end
-
 @implementation PlayingCardView
 
-@synthesize faceCardScaleFactor = _faceCardScaleFactor;
-
-#define DEFAULT_FACE_CARD_SCALE_FACTOR 0.90
-
-- (CGFloat)faceCardScaleFactor
-{
-    if (!_faceCardScaleFactor) _faceCardScaleFactor = DEFAULT_FACE_CARD_SCALE_FACTOR;
-    
-    return _faceCardScaleFactor;
-}
-
-- (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor
-{
-    _faceCardScaleFactor = faceCardScaleFactor;
-    [self setNeedsDisplay];
-}
-
+#pragma mark - Begin Playing Card Methods
 - (void)setSuit:(NSString *)suit
 {
     _suit = suit;
@@ -43,60 +23,15 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
-
 - (NSString *)rankAsString
 {
     return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"][self.rank];
 }
 
-#pragma mark - Gesture Handlers
+#pragma mark - End Playing Card Methods
 
-- (void)pinch:(UIPinchGestureRecognizer *)gesture
+- (void) drawCard
 {
-    if((gesture.state == UIGestureRecognizerStateChanged) || gesture.state == UIGestureRecognizerStateEnded)
-    {
-        self.faceCardScaleFactor *= gesture.scale;
-        gesture.scale = 1.0;
-    }
-}
-
-
-#pragma mark - Drawing
-
-#define CORNER_FONT_STANDARD_HEIGHT 180.0
-
-
-#define CORNER_RADIUS 12.0
-
-- (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT;}
-- (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
-- (CGFloat)cornerOffset { return [self cornerRadius] / 3.0;}
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-    
-    //draw outside of card, draw rounded rect
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
-    
-    //turn on clipping for this roundedRect
-    //only fill inside
-    [roundedRect addClip];
-    
-    //fill inside of roundedRect to white
-    [[UIColor whiteColor] setFill];
-    UIRectFill(self.bounds);
-    
-    //stroke boundary of roundedRect
-    [[UIColor blackColor] setStroke];
-    [roundedRect stroke];
     
     UIImage *faceImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit]];
     if (self.faceUp)
@@ -118,6 +53,7 @@
     
 }
 
+//begin playing card specific code
 - (void)drawCorners
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -144,18 +80,6 @@
     [self popContext];
 }
 
-- (void)pushContextAndRotateUpsideDown
-{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    CGContextTranslateCTM(context, self.bounds.size.width, self.bounds.size.height);
-    CGContextRotateCTM(context, M_PI);
-}
-
-- (void)popContext
-{
-    CGContextRestoreGState(UIGraphicsGetCurrentContext());
-}
 #pragma mark - Draw Pips
 #define PIP_FONT_SCALE_FACTOR 0.20
 #define PIP_HOFFSET_PERCENTAGE 0.165
@@ -228,32 +152,13 @@
 }
 
 #pragma mark - Initialization
-- (void) setup
-{
-    
-    //clears background color
-    self.backgroundColor = nil;
-    
-    //sets turns opaque off
-    self.opaque = NO;
-    
-    //redraw when bounds change
-    self.contentMode = UIViewContentModeRedraw;
-}
-
-- (void)awakeFromNib
-{
-    [self setup];
-}
-
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
+//- (id)initWithFrame:(CGRect)frame
+//{
+//    self = [super initWithFrame:frame];
+//    if (self) {
+//        // Initialization code
+//    }
+//    return self;
+//}
 
 @end
