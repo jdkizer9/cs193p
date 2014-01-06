@@ -33,13 +33,11 @@
     [self setNeedsDisplay];
 }
 
-
 - (void)setFaceUp:(BOOL)faceUp
 {
     _faceUp = faceUp;
     [self setNeedsDisplay];
 }
-
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -49,7 +47,6 @@
     }
     return self;
 }
-
 
 #pragma mark - Gesture Handlers
 
@@ -62,12 +59,9 @@
     }
 }
 
-
 #pragma mark - Drawing
 
 #define CORNER_FONT_STANDARD_HEIGHT 180.0
-
-
 #define CORNER_RADIUS 12.0
 
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT;}
@@ -95,13 +89,19 @@
     [[UIColor blackColor] setStroke];
     [roundedRect stroke];
     
-    
     //give subclass opportunity to
     //draw the card
+    [self pushContext];
     [self drawCard];
+    [self popContext];
     
 }
 
+- (void)pushContext
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+}
 - (void)pushContextAndRotateUpsideDown
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -115,12 +115,10 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
-
 - (void) drawCard
 {
     
 }
-
 
 - (void) setup
 {

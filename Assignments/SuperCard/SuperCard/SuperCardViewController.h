@@ -16,5 +16,6 @@
 
 - (Deck *)createDeck;
 - (void)updateCardView:(CardView *)cardView forCard:(Card*)card;
+- (void)handleCardViewTap:(UITapGestureRecognizer *)gesture;
 
 @end

@@ -24,6 +24,7 @@
 - (CGFloat)cornerRadius;
 - (CGFloat)cornerOffset;
 
+- (void)pushContext;
 - (void)pushContextAndRotateUpsideDown;
 - (void)popContext;
 

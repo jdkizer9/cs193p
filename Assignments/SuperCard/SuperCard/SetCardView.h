@@ -12,7 +12,37 @@
 @interface SetCardView : CardView
 
 
-
+//typedef NS_ENUM(NSInteger, SetCardNumber) {
+//    SetCardNumberNone = 0,
+//    SetCardNumberOne,
+//    SetCardNumberTwo,
+//    SetCardNumberThree,
+//    SetCardNumberMax
+//};
+//
+//typedef NS_ENUM(NSInteger, SetCardSymbol) {
+//    SetCardSymbolNone  = 0,
+//    SetCardSymbolDiamond,
+//    SetCardSymbolSquiggle,
+//    SetCardSymbolOval,
+//    SetCardSymbolMax
+//};
+//
+//typedef NS_ENUM(NSInteger, SetCardShading) {
+//    SetCardShadingNone  = 0,
+//    SetCardShadingSolid,
+//    SetCardShadingStriped,
+//    SetCardShadingOpen,
+//    SetCardShadingMax
+//};
+//
+//typedef NS_ENUM(NSInteger, SetCardColor) {
+//    SetCardColorNone  = 0,
+//    SetCardColorRed,
+//    SetCardColorGreen,
+//    SetCardColorPurple,
+//    SetCardColorMax
+//};
 
 @property (nonatomic) SetCardNumber number;
 @property (nonatomic) SetCardSymbol symbol;

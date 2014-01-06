@@ -33,6 +33,16 @@
     if (!self.cardView.faceUp) [self drawRandomCard];
 }
 
+- (void)handleCardViewTap:(UITapGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        self.cardView.faceUp = !self.cardView.faceUp;
+        if (!self.cardView.faceUp) [self drawRandomCard];
+    }
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -40,9 +50,15 @@
     
     [self drawRandomCard];
     
+    //target specifies self.cardView
+    //pinch: must reside in CardView class
     [self.cardView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.cardView action:@selector(pinch:)]];
+    
+    //target specifies self
+    //handleCardViewTap: must reside in SuperCardViewController class
+    [self.cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardViewTap:)]];
+        
 }
-
 
 - (void)drawRandomCard
 {
