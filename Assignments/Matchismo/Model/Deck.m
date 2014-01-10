@@ -30,8 +30,6 @@
     } else {
         [self.cards addObject:card];
     }
-    
-    
 }
 
 - (void)addCard:(Card *)card
@@ -51,7 +49,23 @@
     }
     
     return randomCard;
-    
+}
+
+- (NSUInteger)cardsInDeck
+{
+    return [self.cards count];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    Deck *newDeck = [[[Deck class] allocWithZone:zone] init];
+    if(newDeck) {
+        for (Card *card in self.cards)
+        {
+            [newDeck addCard:card];            
+        }
+    }
+    return newDeck;
 }
 
 

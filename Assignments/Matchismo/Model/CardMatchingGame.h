@@ -9,20 +9,24 @@
 #import <Foundation/Foundation.h>
 #import "Deck.h"
 #import "Card.h"
-#import "CardGameHistoryLog.h"
 
 @interface CardMatchingGame : NSObject
 
 //designated Initializer
-- (instancetype)initWithCardCount:(NSUInteger)count
-                        usingDeck:(Deck *)deck
-                       matchCount:(NSInteger)matchCount;
+- (instancetype)initUsingDeck:(Deck *)deck
+               withMatchCount:(NSInteger)matchCount;
 
 - (void)chooseCardAtIndex:(NSUInteger)index;
+- (void)chooseCard:(Card*)card;
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (Card *)drawCardFromDeck;
+- (void)startNewGame;
+//- (void)shuffleDeckAndReset:(BOOL)reset;
+- (NSUInteger)numberOfUndrawnCards;
+- (void)addCardToDiscardPile:(Card *)card;
 
 @property (nonatomic, readonly) NSInteger score;
-@property (strong, nonatomic) CardGameHistoryLog* historyLog;
+//@property (strong, nonatomic) CardGameHistoryLog* historyLog;
 
 
 @end

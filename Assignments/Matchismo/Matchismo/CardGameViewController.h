@@ -10,19 +10,20 @@
 #import <UIKit/UIKit.h>
 #import "Deck.h"
 #import "Card.h"
-#import "CardGameHistoryLog.h"
+#import "CardView.h"
 
 @interface CardGameViewController : UIViewController
 
 // protected
 // subclass must implement
 - (Deck *)createDeck; //abstract
-- (void)updateCardButton:(UIButton *)cardButton
-                 forCard:(Card*)card; //abstract
-- (NSAttributedString *) attributedStringFromCardGameHistoryEntry:(CardGameHistoryEntry *)entry; //abstract
-- (NSString *)historySegueIDName; //abstract
+- (void)updateCardView:(CardView *)cardView
+               forCard:(Card*)card; //abstract
 
 //abstract property
 @property (nonatomic, readonly) NSInteger matchCount;
+@property (nonatomic, readonly) NSInteger numberOfVisibleCards;
+@property (nonatomic, readonly) NSInteger numberOfNewCardsToDraw;
+@property (nonatomic, readonly) Class viewCardClass;
 
 @end
