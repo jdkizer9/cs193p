@@ -13,26 +13,42 @@
 
 - (void)setNumber:(SetCardNumber)number
 {
-    _number = number;
-    [self setNeedsDisplay];
+    if (_number != number)
+    {
+        _number = number;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)setSymbol:(SetCardSymbol)symbol
 {
-    _symbol = symbol;
-    [self setNeedsDisplay];
+    if (_symbol != symbol)
+    {
+        _symbol = symbol;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (void) setShading:(SetCardShading)shading
 {
-    _shading = shading;
-    [self setNeedsDisplay];
+    if (_shading != shading)
+    {
+        _shading = shading;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (void) setColor:(SetCardColor)color
 {
-    _color = color;
-    [self setNeedsDisplay];
+    if (_color != color)
+    {
+        _color = color;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (BOOL)isFaceUp
@@ -191,6 +207,9 @@
 
 -(UIColor *)cardBackgroundColor
 {
+    if (self.hinting)
+        return [UIColor redColor];
+    
     if (self.isChosen)
         return [[UIColor alloc] initWithRed:(209.0/256.0) green:(227.0/256.0) blue:(240.0/256.0) alpha:1.0];
     else

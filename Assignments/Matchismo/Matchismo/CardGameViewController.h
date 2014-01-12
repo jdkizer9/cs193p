@@ -11,8 +11,12 @@
 #import "Deck.h"
 #import "Card.h"
 #import "CardView.h"
+#import "CardGameAnimationLogEntry.h"
 
 @interface CardGameViewController : UIViewController
+
+//for the subclasses
+- (void)addAnimationLogEntry:(CardGameAnimationLogEntry*)entry;
 
 // protected
 // subclass must implement

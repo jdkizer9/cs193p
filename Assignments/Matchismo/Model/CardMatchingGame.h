@@ -24,6 +24,8 @@
 //- (void)shuffleDeckAndReset:(BOOL)reset;
 - (NSUInteger)numberOfUndrawnCards;
 - (void)addCardToDiscardPile:(Card *)card;
+- (BOOL)matchForHint:(NSMutableArray *)cardArray;
+- (void)hintPenalty:(NSUInteger)penalty;
 
 @property (nonatomic, readonly) NSInteger score;
 //@property (strong, nonatomic) CardGameHistoryLog* historyLog;

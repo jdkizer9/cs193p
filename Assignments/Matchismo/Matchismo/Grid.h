@@ -54,7 +54,7 @@
 
 //new functions to return frame and center of items
 //row major order, based on rowCount, columnCount
--(CGRect)frameForCardViewAtIndex:(NSUInteger)index;
--(CGPoint)centerForCardViewAtIndex:(NSUInteger)index;
+-(CGRect)frameForCellAtIndex:(NSUInteger)index;
+-(CGPoint)centerForCellAtIndex:(NSUInteger)index;
 
 @end

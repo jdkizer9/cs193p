@@ -13,14 +13,22 @@
 #pragma mark - Begin Playing Card Methods
 - (void)setSuit:(NSString *)suit
 {
-    _suit = suit;
-    [self setNeedsDisplay];
+    if(_suit != suit)
+    {
+        _suit = suit;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)setrank:(NSUInteger)rank
 {
-    _rank = rank;
-    [self setNeedsDisplay];
+    if (_rank != rank)
+    {
+        _rank = rank;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
 - (NSString *)rankAsString
@@ -150,15 +158,5 @@
                                 upsideDown:YES];
     }
 }
-
-#pragma mark - Initialization
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//    }
-//    return self;
-//}
 
 @end

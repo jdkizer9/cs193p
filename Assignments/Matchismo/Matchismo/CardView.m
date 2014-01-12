@@ -10,6 +10,8 @@
 
 @interface CardView()
 
+@property (nonatomic, readwrite) NSUInteger displayIndex;
+
 @end
 
 @implementation CardView
@@ -41,15 +43,38 @@
 
 - (void)setFaceUp:(BOOL)faceUp
 {
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
+    if (_faceUp != faceUp)
+    {
+        _faceUp = faceUp;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (void)setChosen:(BOOL)chosen
+{
+    if (_chosen != chosen)
+    {
+        _chosen = chosen;
+        self.redraw = YES;
+        [self setNeedsDisplay];
+    }
+}
+
+-(UIColor *)cardBackgroundColor
+{
+    if (self.hinting)
+        return [UIColor redColor];
+    return [UIColor whiteColor];
+}
+
+
+- (instancetype)initWithFrame:(CGRect)frame andDisplayIndex:(NSUInteger)displayIndex
 {
     self = [super initWithFrame:frame];
     if (self) {
         [self setup];
+        self.displayIndex = displayIndex;
     }
     return self;
 }
@@ -122,10 +147,7 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
--(UIColor *)cardBackgroundColor
-{
-    return [UIColor whiteColor];
-}
+
 
 - (void) drawCard
 {

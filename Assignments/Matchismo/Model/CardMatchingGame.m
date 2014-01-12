@@ -236,5 +236,26 @@ static const int COST_TO_CHOOSE = 1;
     
 }
 
+- (BOOL)matchForHint:(NSArray *)cardArray
+{
+    assert([cardArray count] == self.matchCount);
+    
+    Card *card = cardArray[0];
+    
+    NSRange slicedArrayRange;
+    slicedArrayRange.location = 1;
+    slicedArrayRange.length = [cardArray count]-1;
+    
+    if ([card match:[cardArray subarrayWithRange:slicedArrayRange]])
+        return YES;
+    else
+        return NO;
+}
+
+- (void)hintPenalty:(NSUInteger)penalty
+{
+    self.score -= penalty;
+}
+
 
 @end

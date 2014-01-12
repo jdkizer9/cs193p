@@ -34,14 +34,21 @@
         playingCardView.rank = playingCard.rank;
         playingCardView.suit= playingCard.suit;
         
-        playingCardView.faceUp = playingCard.isChosen;
-        playingCardView.chosen = playingCard.isChosen;
+        //animate this
+        //card should flip over
+        if ( playingCardView.faceUp != playingCard.isChosen)
+        {
+            //only animate flip if not matched or is face down
+            if (!playingCard.isMatched || !playingCardView.faceUp)
+                [self addAnimationLogEntry:[[CardGameAnimationLogEntry alloc]initWithAnimationType:CardGameAnimationFlipCard
+                                                                                      withCardView:cardView
+                                                                                         withPoint:CGPointMake(0, 0)]];
+            
+            playingCardView.faceUp = playingCard.isChosen;
+            playingCardView.chosen = playingCard.isChosen;
+        }
     }
 }
-
-//@property (nonatomic, readonly) NSInteger matchCount;
-//@property (nonatomic, readonly) NSInteger numberOfVisibleCards;
-//@property (nonatomic, readonly) Class viewCardClass;
 
 - (NSInteger)numberOfVisibleCards
 {

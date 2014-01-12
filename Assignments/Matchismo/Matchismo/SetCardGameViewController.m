@@ -38,7 +38,12 @@
         setCardView.shading = setCard.shading;
         setCardView.color = setCard.color;
         
-        setCardView.chosen = setCard.isChosen;
+        //when selected / deselected, animate the transistion
+        //card should transition from white BG to blue BG
+        if (setCardView.chosen != setCard.isChosen)
+        {
+            setCardView.chosen = setCard.isChosen;
+        }
     }
 }
 

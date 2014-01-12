@@ -90,10 +90,17 @@
         //must be at least one card in last row
         //assert(((self.rowCount*self.columnCount)-self.numberOfCells) < self.columnCount);
         
+        NSUInteger emptySpaces = (self.rowCount*self.columnCount) - self.numberOfCells;
         
-        int emptySpaces = (self.rowCount*self.columnCount) - self.numberOfCells;
+        //remove rows
+        while ( (emptySpaces/self.columnCount) > 0)
+        {
+            self.columnCount--;
+            emptySpaces = (self.rowCount*self.columnCount) - self.numberOfCells;            
+        }
+        
         //determine how many columns to remove
-        while (emptySpaces >= (self.rowCount-1))
+        while ((emptySpaces) >= (self.rowCount))
         {
             self.columnCount--;
             emptySpaces = (self.rowCount*self.columnCount) - self.numberOfCells;
@@ -126,7 +133,7 @@
     
     if (row == (self.rowCount-1) && ((self.rowCount*self.columnCount) != self.numberOfCells))
         //possible larger gaps in this row
-        numberOfCardsInRow = (self.rowCount*self.columnCount)-self.numberOfCells;
+        numberOfCardsInRow = self.columnCount-((self.rowCount*self.columnCount)-self.numberOfCells);
     else
         numberOfCardsInRow = self.columnCount;
     
@@ -142,7 +149,17 @@
     //account for any spaces
     center.x += [self emptySpaceInRow:row]*(column+1);
     center.y += row * self.cellSize.height;
+    //account for any spaces
+    center.y += [self emptySpaceInColumn]*(row+1);
     return center;
+}
+
+- (CGFloat)emptySpaceInColumn
+{
+    // (total height - (height of cards)*(self.rowCount))/(self.rowCount+1)
+    CGFloat gapHeight = (self.size.height - (self.cellSize.height*self.rowCount))/(self.rowCount+1);
+    
+    return gapHeight;
 }
 
 - (CGRect)frameOfCellAtRow:(NSUInteger)row inColumn:(NSUInteger)column
@@ -246,10 +263,10 @@
     return description;
 }
 
--(CGRect)frameForCardViewAtIndex:(NSUInteger)index
+-(CGRect)frameForCellAtIndex:(NSUInteger)index
 {
     
-    if (self.inputsAreValid)
+    if (self.inputsAreValid && index < self.numberOfCells)
     {
         //row major order
         //determine row and column
@@ -262,10 +279,10 @@
         return CGRectMake(0, 0, 0, 0);
 }
 
--(CGPoint)centerForCardViewAtIndex:(NSUInteger)index
+-(CGPoint)centerForCellAtIndex:(NSUInteger)index
 {
     
-    if (self.inputsAreValid)
+    if (self.inputsAreValid && index < self.numberOfCells)
     {
         //row major order
         //determine row and column

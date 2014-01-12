@@ -57,34 +57,49 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VEf-FC-Gd4">
-                                <rect key="frame" x="135" y="393" width="81" height="30"/>
+                                <rect key="frame" x="186" y="393" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="More Cards">
+                                <state key="normal" title="+">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="touchMoreCardsButton:" destination="0MJ-2Q-5t6" eventType="touchUpInside" id="JKF-zk-8RS"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nth-wD-JjK">
+                                <rect key="frame" x="148" y="393" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Hint">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchHintButton:" destination="0MJ-2Q-5t6" eventType="touchUpInside" id="te3-X1-POY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="XC6-n1-04h" firstAttribute="leading" secondItem="VEf-FC-Gd4" secondAttribute="trailing" constant="8" symbolic="YES" id="0Ls-RP-OZ9"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XC6-n1-04h" secondAttribute="trailing" constant="20" symbolic="YES" id="31F-2D-YFb"/>
                             <constraint firstItem="GIb-JA-WHQ" firstAttribute="top" secondItem="2NL-iW-kug" secondAttribute="bottom" constant="20" symbolic="YES" id="Cwt-iJ-IMK"/>
                             <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="XC6-n1-04h" secondAttribute="bottom" constant="20" symbolic="YES" id="KZu-Yy-EWb"/>
                             <constraint firstItem="GIb-JA-WHQ" firstAttribute="leading" secondItem="6uC-S5-HUP" secondAttribute="leading" constant="20" symbolic="YES" id="QN9-9o-IDW"/>
                             <constraint firstItem="XC6-n1-04h" firstAttribute="top" secondItem="GIb-JA-WHQ" secondAttribute="bottom" constant="8" symbolic="YES" id="Xaz-oc-xy5"/>
+                            <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="nth-wD-JjK" secondAttribute="bottom" constant="20" symbolic="YES" id="cWO-4W-tjZ"/>
+                            <constraint firstItem="VEf-FC-Gd4" firstAttribute="leading" secondItem="nth-wD-JjK" secondAttribute="trailing" constant="8" symbolic="YES" id="dvd-bc-oa0"/>
                             <constraint firstAttribute="trailing" secondItem="GIb-JA-WHQ" secondAttribute="trailing" constant="20" symbolic="YES" id="fb4-GJ-0R0"/>
+                            <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="XC6-n1-04h" secondAttribute="bottom" constant="20" symbolic="YES" id="ilr-9P-fjy"/>
                             <constraint firstItem="rf9-Zz-vOQ" firstAttribute="leading" secondItem="6uC-S5-HUP" secondAttribute="leading" constant="20" symbolic="YES" id="kt6-uI-y0o"/>
-                            <constraint firstItem="XC6-n1-04h" firstAttribute="leading" secondItem="VEf-FC-Gd4" secondAttribute="trailing" constant="8" symbolic="YES" id="nDm-vm-1of"/>
                             <constraint firstAttribute="trailing" secondItem="XC6-n1-04h" secondAttribute="trailing" constant="20" symbolic="YES" id="ndR-Ok-ec6"/>
+                            <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="VEf-FC-Gd4" secondAttribute="bottom" constant="20" symbolic="YES" id="sLv-LD-CON"/>
                             <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="rf9-Zz-vOQ" secondAttribute="bottom" constant="20" symbolic="YES" id="wN6-gJ-jJh"/>
-                            <constraint firstItem="ios-H3-aMU" firstAttribute="top" secondItem="VEf-FC-Gd4" secondAttribute="bottom" constant="20" symbolic="YES" id="xkv-Ce-1cO"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="gPC-Yo-SwJ"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="cardAreaView" destination="GIb-JA-WHQ" id="Evh-eN-M9g"/>
+                        <outlet property="hintButton" destination="nth-wD-JjK" id="xVv-p9-leL"/>
                         <outlet property="moreCardsButton" destination="VEf-FC-Gd4" id="f6u-vV-Djg"/>
                         <outlet property="scoreLabel" destination="rf9-Zz-vOQ" id="7FI-Qg-K2D"/>
                     </connections>
@@ -127,22 +142,34 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OgE-KT-sn8">
-                                <rect key="frame" x="135" y="393" width="81" height="30"/>
+                                <rect key="frame" x="186" y="393" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="More Cards">
+                                <state key="normal" title="+">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="touchMoreCardsButton:" destination="F0q-Vt-9kg" eventType="touchUpInside" id="UuY-wD-nIB"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNs-Ar-oIp">
+                                <rect key="frame" x="148" y="393" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Hint">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchHintButton:" destination="F0q-Vt-9kg" eventType="touchUpInside" id="TFg-ak-tgK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="2f8-vG-Psq" firstAttribute="top" secondItem="zP9-UT-vdL" secondAttribute="bottom" constant="20" symbolic="YES" id="0lX-fF-x1g"/>
+                            <constraint firstItem="2f8-vG-Psq" firstAttribute="top" secondItem="RNs-Ar-oIp" secondAttribute="bottom" constant="20" symbolic="YES" id="81P-aO-eYN"/>
                             <constraint firstItem="inN-FE-Dd9" firstAttribute="top" secondItem="wnZ-hb-pcV" secondAttribute="bottom" constant="20" symbolic="YES" id="B2h-uj-eOX"/>
                             <constraint firstItem="uXB-PC-epT" firstAttribute="leading" secondItem="uBT-Av-9uC" secondAttribute="leading" constant="20" symbolic="YES" id="EtP-90-ghD"/>
                             <constraint firstAttribute="trailing" secondItem="zP9-UT-vdL" secondAttribute="trailing" constant="20" symbolic="YES" id="QTc-Qd-kJ2"/>
+                            <constraint firstItem="OgE-KT-sn8" firstAttribute="leading" secondItem="RNs-Ar-oIp" secondAttribute="trailing" constant="8" symbolic="YES" id="Qoh-hc-pr8"/>
                             <constraint firstItem="2f8-vG-Psq" firstAttribute="top" secondItem="OgE-KT-sn8" secondAttribute="bottom" constant="20" symbolic="YES" id="XNY-ps-n9G"/>
                             <constraint firstItem="2f8-vG-Psq" firstAttribute="top" secondItem="uXB-PC-epT" secondAttribute="bottom" constant="20" symbolic="YES" id="ZVp-K5-pNr"/>
                             <constraint firstItem="zP9-UT-vdL" firstAttribute="leading" secondItem="OgE-KT-sn8" secondAttribute="trailing" constant="8" symbolic="YES" id="a8q-Hp-duE"/>
@@ -155,6 +182,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="cardAreaView" destination="inN-FE-Dd9" id="8HS-Hp-eSZ"/>
+                        <outlet property="hintButton" destination="RNs-Ar-oIp" id="2BH-tq-qJJ"/>
                         <outlet property="moreCardsButton" destination="OgE-KT-sn8" id="Asu-0h-ANi"/>
                         <outlet property="scoreLabel" destination="uXB-PC-epT" id="uoU-0S-wch"/>
                     </connections>

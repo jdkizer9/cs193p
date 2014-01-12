@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+//#import "CardGameAnimationLog.h"
 
 @interface CardView : UIView
 
@@ -15,6 +16,17 @@
 @property (nonatomic) CGFloat faceCardScaleFactor;
 @property (nonatomic, getter = isChosen) BOOL chosen;
 
+@property (nonatomic, getter = shouldRedraw) BOOL redraw;
+@property (nonatomic, readonly) NSUInteger displayIndex;
+@property (nonatomic) BOOL hinting;
+
+//@property (nonatomic) CGPoint realCenter;
+@property (nonatomic) CGPoint removeCenter;
+//@property (nonatomic) CGPoint moveToPoint;
+
+@property (nonatomic) UIColor *cardBackgroundColor;
+
+- (instancetype)initWithFrame:(CGRect)frame andDisplayIndex:(NSUInteger)displayIndex;
 
 - (void) drawCard;//abstract
 
@@ -29,7 +41,7 @@
 - (void)pushContextAndRotateUpsideDown;
 - (void)popContext;
 
--(UIColor *)cardBackgroundColor;
+//-(UIColor *)cardBackgroundColor;
 
 
 @end
