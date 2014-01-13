@@ -12,6 +12,11 @@
 
 @property (nonatomic, readwrite) NSUInteger displayIndex;
 
+//dynamic animator stuff
+@property (strong, nonatomic) UIAttachmentBehavior *attachment;
+@property (nonatomic) CGFloat originalAttachmentLength;
+
+
 @end
 
 @implementation CardView
@@ -147,7 +152,24 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
+- (void)attachCardViewToPoint:(CGPoint)anchorPoint withAnimator:(UIDynamicAnimator *)animator
+{
+    self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self attachedToAnchor:anchorPoint];
+    self.originalAttachmentLength = ({CGFloat d1 = self.center.x - anchorPoint.x, d2 = self.center.y - anchorPoint.y; sqrt(d1 * d1 + d2 * d2); });
+    [animator addBehavior:self.attachment];
+}
 
+- (void)setCardViewAttachmentLengthFactor:(CGFloat)attachmentLengthFactor
+{
+    CGFloat attachmentLength = self.originalAttachmentLength * attachmentLengthFactor;
+    self.attachment.length = attachmentLength;
+}
+
+- (void)removeCardViewFromAttachmentWithAnimator:(UIDynamicAnimator *)animator
+{
+    [animator removeBehavior:self.attachment];
+    self.attachment = nil;
+}
 
 - (void) drawCard
 {

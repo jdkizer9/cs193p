@@ -43,5 +43,12 @@
 
 //-(UIColor *)cardBackgroundColor;
 
+@property (strong, nonatomic) UITapGestureRecognizer *tapCardGesture;
+
+//dynamic animator stuff
+- (void)attachCardViewToPoint:(CGPoint)anchorPoint withAnimator:(UIDynamicAnimator *)animator;
+- (void)setCardViewAttachmentLengthFactor:(CGFloat)attachmentLengthFactor;
+- (void)removeCardViewFromAttachmentWithAnimator:(UIDynamicAnimator *)animator;
+
 
 @end

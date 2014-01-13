@@ -13,7 +13,7 @@
 #import "CardGameAnimationLog.h"
 
 
-@interface CardGameViewController ()
+@interface CardGameViewController () <UIDynamicAnimatorDelegate>
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UIView *cardAreaView;
 @property (nonatomic) CGRect lastCardAreaViewBounds;
@@ -31,6 +31,14 @@
 @property (nonatomic) NSUInteger lastHintIndex;
 @property (weak, nonatomic) IBOutlet UIButton *hintButton;
 @property (nonatomic) NSUInteger remainingHints;
+
+//dynamic animator stuff
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIAttachmentBehavior *pileAttachment;
+@property (strong, nonatomic) UIPinchGestureRecognizer *pinchGesture;
+@property (strong, nonatomic) UITapGestureRecognizer *tapPileGesture;
+@property (strong, nonatomic) UIPanGestureRecognizer *panPileGesture;
+
 
 @end
 
@@ -86,6 +94,33 @@
     return _hintArray;
 }
 
+- (UIDynamicAnimator *)animator
+{
+    if (!_animator) {
+        _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.cardAreaView];
+        _animator.delegate = self;
+    }
+    return _animator;
+}
+
+- (UIPinchGestureRecognizer *)pinchGesture
+{
+    if(!_pinchGesture) _pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+    return _pinchGesture;
+}
+
+- (UITapGestureRecognizer *)tapPileGesture
+{
+    if (!_tapPileGesture) _tapPileGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapPile:)];
+    return _tapPileGesture;
+}
+
+- (UIPanGestureRecognizer *)panPileGesture
+{
+    if (!_panPileGesture) _panPileGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panPile:)];
+    return _panPileGesture;
+}
+
 
 - (void)viewDidLoad
 {
@@ -122,9 +157,8 @@
     //grab a card and associate it with a view by adding
     //it to the cardsInPlay array
     [self createNewCardsAndCardViews];
-    
-    
-    
+    //activate pinch gesture
+    [self activatePinchGesture];
 }
 
 - (void)createNewCardsAndCardViews
@@ -138,6 +172,8 @@
         //create new card and cardView
         [self addNewCardAndViewAtIndex:i];
     }
+    
+    
     
     assert([self.cardViews count] == self.numberOfVisibleCards);
     assert([self.cardsInPlay count] == self.numberOfVisibleCards);
@@ -163,8 +199,9 @@
             [self.cardsInPlay insertObject:card atIndex:index];
             [self.cardViews insertObject:cardView atIndex:index];
             
-            //need to add gestureRecognizer for each cardView
-            [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardViewTap:)]];
+            //need to initialize tapCardGesture for each cardView
+            cardView.tapCardGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardViewTap:)];
+            [cardView addGestureRecognizer: cardView.tapCardGesture];
             
             //add cardView to super view
             [self.cardAreaView addSubview:cardView];
@@ -248,9 +285,6 @@
 //this should be invoked when orientation has been updated
 - (void)updateCardViewsCentersAndFrames
 {
-//    while (self.animationLog.animating) {
-//        [NSThread sleepForTimeInterval:.25];
-//    }
     
     if (self.animationLog.animating)
         return;
@@ -260,12 +294,12 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         for (int i=0; i<[self.cardViews count];i++)
+                         for (int i=0; i<[weakself.cardViews count];i++)
                          {
                              CardView *cardView = weakself.cardViews[i];
                              
-                             cardView.frame = [self.grid frameForCellAtIndex:cardView.displayIndex];
-                             cardView.center = [self.grid centerForCellAtIndex:cardView.displayIndex];
+                             cardView.frame = [weakself.grid frameForCellAtIndex:cardView.displayIndex];
+                             cardView.center = [weakself.grid centerForCellAtIndex:cardView.displayIndex];
                          }
                      }
                      completion:^(BOOL completed){
@@ -313,6 +347,24 @@
     [self.animationLog addAnimationEntry:entry];
 }
 
+- (void)activateCardViewTapGestures
+{
+    for (CardView *cardView in self.cardViews)
+    {
+        if (![cardView.gestureRecognizers containsObject:cardView.tapCardGesture])
+            [cardView addGestureRecognizer: cardView.tapCardGesture];
+    }
+}
+
+- (void)deactivateCardViewTapGestures
+{
+    for (CardView *cardView in self.cardViews)
+    {
+        if ([cardView.gestureRecognizers containsObject:cardView.tapCardGesture])
+            [cardView removeGestureRecognizer: cardView.tapCardGesture];
+    }
+}
+
 - (void)handleCardViewTap:(UITapGestureRecognizer *)gesture
 {
     if (self.animationLog.isAnimating)
@@ -328,6 +380,211 @@
             [self.game chooseCard:card];
         }
         [self updateUI];
+    }
+}
+
+- (void)activatePinchGesture
+{
+    if (![self.cardAreaView.gestureRecognizers containsObject:self.pinchGesture])
+        [self.cardAreaView addGestureRecognizer:self.pinchGesture];
+}
+
+- (void)deactivatePinchGesture
+{
+    if ([self.cardAreaView.gestureRecognizers containsObject:self.pinchGesture])
+        [self.cardAreaView removeGestureRecognizer:self.pinchGesture];
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
+{
+    
+    if (gesture.state == UIGestureRecognizerStateBegan)
+    {
+        //when pinch starts, attach each cardView to center of cardAreaView using
+        //(void)attachCardViewToPoint:(CGPoint)anchorPoint withAnimator:(UIDynamicAnimator *)animator;
+        //update attachment length using
+        //(void)setCardViewAttachmentLengthFactor:(CGFloat)attachmentLengthFactor;
+        
+        for (CardView *cardView in self.cardViews)
+        {
+            [cardView attachCardViewToPoint:self.cardAreaView.center withAnimator:self.animator];
+            [cardView setCardViewAttachmentLengthFactor:gesture.scale];
+        }
+    }
+    else if (gesture.state == UIGestureRecognizerStateChanged)
+    {
+        //update attachment length using
+        //(void)setCardViewAttachmentLengthFactor:(CGFloat)attachmentLengthFactor;
+        for (CardView *cardView in self.cardViews)
+        {
+            [cardView setCardViewAttachmentLengthFactor:gesture.scale];
+        }
+        
+    } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed || gesture.state == UIGestureRecognizerStateCancelled)
+    {
+        //when ended, if scale > 1, move cards to their original position
+        //if scale < 1, deactive pinch gesture
+        //remove tap gesture from all cards, move cards into the middle
+        
+        
+        
+        //remove attachment behavior from all cardViews
+        for (CardView *cardView in self.cardViews)
+        {
+            [cardView removeCardViewFromAttachmentWithAnimator:self.animator];
+        }
+        
+        if ( (gesture.state == UIGestureRecognizerStateEnded && gesture.scale > 1.0) || gesture.state == UIGestureRecognizerStateFailed || gesture.state == UIGestureRecognizerStateCancelled )
+        {
+            [self updateCardViewsCentersAndFrames];
+        }
+        else
+        {
+            [self deactivatePinchGesture];
+            [self deactivateCardViewTapGestures];
+            
+            __weak CardGameViewController *weakself = self;
+            [UIView animateWithDuration:.5
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState
+                             animations:^{
+                                 for (int i=0; i<[weakself.cardViews count];i++)
+                                 {
+                                     CardView *cardView = weakself.cardViews[i];
+                                     
+                                     cardView.frame = [weakself.grid frameForCellAtIndex:cardView.displayIndex];
+                                     cardView.center = self.cardAreaView.center;
+                                 }
+                             }
+                             completion:^(BOOL completed){
+                                 [weakself completePinchGesture];
+                             }];
+            
+        }
+        
+    }
+    
+    
+    
+    //when
+    
+//    if((gesture.state == UIGestureRecognizerStateChanged) || gesture.state == UIGestureRecognizerStateEnded)
+//    {
+//        self.faceCardScaleFactor *= gesture.scale;
+//        gesture.scale = 1.0;
+//    }
+}
+
+- (void)completePinchGesture
+{
+    //remove all but top card (creates pile)
+    //add tap and pan gestures to pile
+    
+    //how to determine top card?
+    
+    //last added card
+    CardView *pileCardView = [[self.cardAreaView subviews]lastObject];
+    
+    for (CardView *cardView in self.cardViews)
+    {
+        if (cardView == pileCardView)
+            continue;
+        //try hiding the cards
+        cardView.hidden = YES;
+    }
+    
+    [self activatePanPileGesture:pileCardView];
+    [self activateTapPileGesture:pileCardView];
+    
+    [self updateUI];
+}
+
+- (void)activateTapPileGesture:(CardView *)cardView
+{
+    if (![cardView.gestureRecognizers containsObject:self.tapPileGesture])
+        [cardView addGestureRecognizer:self.tapPileGesture];
+}
+
+- (void)deactivateTapPileGesture:(CardView *)cardView
+{
+    if ([cardView.gestureRecognizers containsObject:self.tapPileGesture])
+        [cardView removeGestureRecognizer:self.tapPileGesture];
+}
+
+- (void)tapPile:(UITapGestureRecognizer *)gesture
+{
+    //remove tapPile and panPile behaviors
+    CardView *pileCardView = (CardView *)gesture.view;
+    [self deactivateTapPileGesture:pileCardView];
+    [self deactivatePanPileGesture:pileCardView];
+    
+    for (CardView *cardView in self.cardViews)
+    {
+        if (cardView == pileCardView)
+            continue;
+        //try unhiding the cards
+        cardView.center = pileCardView.center;
+        cardView.hidden = NO;
+    }
+    
+    __weak CardGameViewController *weakself = self;
+    [UIView animateWithDuration:.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         for (int i=0; i<[weakself.cardViews count];i++)
+                         {
+                             CardView *cardView = weakself.cardViews[i];
+                             
+                             cardView.frame = [weakself.grid frameForCellAtIndex:cardView.displayIndex];
+                             cardView.center = [weakself.grid centerForCellAtIndex:cardView.displayIndex];
+                         }
+                     }
+                     completion:^(BOOL completed){
+                         [weakself completeTapPileGesture];
+                     }];
+    
+    
+}
+
+- (void) completeTapPileGesture
+{
+    //activate tap behaviors
+    [self activateCardViewTapGestures];
+    //activate pinch behavior
+    [self activatePinchGesture];
+}
+
+- (void)activatePanPileGesture:(CardView *)cardView
+{
+    if (![cardView.gestureRecognizers containsObject:self.panPileGesture])
+        [cardView addGestureRecognizer:self.panPileGesture];
+}
+
+- (void)deactivatePanPileGesture:(CardView *)cardView
+{
+    if ([cardView.gestureRecognizers containsObject:self.panPileGesture])
+        [cardView removeGestureRecognizer:self.panPileGesture];
+}
+
+- (void)panPile:(UIPanGestureRecognizer *)gesture
+{
+    //pan gesture moves the pile of cards around cardViewArea
+    
+    CGPoint gesturePoint = [gesture locationInView:self.cardAreaView];
+    CardView *cardView = (CardView *)gesture.view;
+    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        self.pileAttachment = [[UIAttachmentBehavior alloc] initWithItem:cardView attachedToAnchor:gesturePoint];
+        [self.animator addBehavior:self.pileAttachment];
+    } else if (gesture.state == UIGestureRecognizerStateChanged) {
+        self.pileAttachment.anchorPoint = gesturePoint;
+    } else if (gesture.state == UIGestureRecognizerStateEnded) {
+        [self.animator removeBehavior:self.pileAttachment];
+        for (CardView *cv in self.cardViews)
+        {
+            cv.center = cardView.center;
+        }
     }
 }
 
@@ -517,13 +774,7 @@
     if (cardCount < self.matchCount)
         return;
     
-    NSArray *hintTryArray = [[NSArray alloc] initWithArray:[self generateCombinations:self.cardsInPlay withChooseCount:[self matchCount]]];
-    
-//    NSMutableArray *testArray = [[NSMutableArray alloc] init];
-//    for (int i=0; i<[self.cardsInPlay count]; i++)
-//        [testArray addObject:[[NSNumber alloc]initWithInt:i]];
-//    
-//    NSArray *hintTryArray = [[NSArray alloc] initWithArray:[self combinationHelper:testArray withChooseCount:[self matchCount]]];
+    NSArray *hintTryArray = [[NSArray alloc] initWithArray:[self combinationHelper:self.cardsInPlay withChooseCount:[self matchCount]]];
     
     for (id obj in hintTryArray)
     {
