@@ -173,8 +173,6 @@
         [self addNewCardAndViewAtIndex:i];
     }
     
-    
-    
     assert([self.cardViews count] == self.numberOfVisibleCards);
     assert([self.cardsInPlay count] == self.numberOfVisibleCards);
 }
@@ -337,6 +335,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self updateUI];
     
     [self updateCardViewsCentersAndFrames];
     //[self updateUI];

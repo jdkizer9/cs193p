@@ -11,7 +11,6 @@
 
 @interface CardView : UIView
 
-
 @property (nonatomic, getter = isFaceUp) BOOL faceUp;
 @property (nonatomic) CGFloat faceCardScaleFactor;
 @property (nonatomic, getter = isChosen) BOOL chosen;
