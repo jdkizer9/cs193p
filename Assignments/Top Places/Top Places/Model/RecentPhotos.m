@@ -51,12 +51,20 @@
     return sharedRecentPhotos;
 }
 
-- (void)updateRecentPhotosWithImageDictionary:(NSDictionary*)imageDictionary
++ (NSArray *)recentPhotos
 {
+    return [RecentPhotos sharedRecentPhotos].recentPhotosMutableArray;
+}
+
++ (void)updateRecentPhotosWithImageDictionary:(NSDictionary*)imageDictionary
+{
+    //use shared instance
+    RecentPhotos *recentPhotos = [RecentPhotos sharedRecentPhotos];
+    
     //determine if imageDictionary is in the recentPhotosArray
     BOOL foundImageDictionaryInRecentPhotosArray = NO;
     NSDictionary *foundPhoto = nil;
-    for (id obj in self.recentPhotosArray)
+    for (id obj in recentPhotos.recentPhotosArray)
     {
         if ([obj isKindOfClass:[NSDictionary class]])
         {
@@ -77,8 +85,8 @@
     {
         //if imageDictionary is in recentPhotosArray, remove it from the array and
         //add it to the front of the array
-        [self.recentPhotosMutableArray removeObject:foundPhoto];
-        [self.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
+        [recentPhotos.recentPhotosMutableArray removeObject:foundPhoto];
+        [recentPhotos.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
     }
     else
     {
@@ -87,18 +95,20 @@
         // - if recentPhotosArray is at maximum capacity (NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
         //   - remove the last entry so that there are only
         //     NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY dictionaries in the arrray
-        [self.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
-        if ([self.recentPhotosMutableArray count] > NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
-            [self.recentPhotosMutableArray removeLastObject];
+        [recentPhotos.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
+        if ([recentPhotos.recentPhotosMutableArray count] > NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
+            [recentPhotos.recentPhotosMutableArray removeLastObject];
     }
     
     //update user defaults
     //[[NSUserDefaults standardUserDefaults] arrayForKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
-    [[NSUserDefaults standardUserDefaults] setObject:[[NSArray alloc] initWithArray:self.recentPhotosMutableArray] forKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
+    [[NSUserDefaults standardUserDefaults] setObject:[[NSArray alloc] initWithArray:recentPhotos.recentPhotosMutableArray] forKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
+
+
 
 
 @end

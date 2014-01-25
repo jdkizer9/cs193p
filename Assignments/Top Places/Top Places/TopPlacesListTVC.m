@@ -43,6 +43,13 @@
     [self fetchPlaces];
 }
 
+- (void)clearModel
+{
+    self.countries = nil;
+    self.placeDictionary = nil;
+    [self.tableView reloadData];
+}
+
 // this method is called in viewDidLoad,
 //   but also when the user "pulls down" on the table view
 //   (because this is the action of self.tableView.refreshControl)
@@ -50,6 +57,9 @@
 - (IBAction)fetchPlaces
 {
     [self.refreshControl beginRefreshing]; // start the spinner
+    
+    [self clearModel];
+    
     NSURL *url = [FlickrFetcher URLforTopPlaces];
     // create a (non-main) queue to do fetch on
     dispatch_queue_t fetchQ = dispatch_queue_create("flickr fetcher", NULL);

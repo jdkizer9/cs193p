@@ -8,8 +8,9 @@
 
 #import "TopPlacesTVC.h"
 #import "Place.h"
+#import "PhotoListTVC.h"
 
-@interface PhotoListForPlaceTVC : TopPlacesTVC
+@interface PhotoListForPlaceTVC : PhotoListTVC
 
 @property (strong, nonatomic) Place *place;
 #define MAXIMUM_NUMBER_OF_PHOTOS 50

@@ -11,7 +11,4 @@
 
 @interface TopPlacesTVC : UITableViewController
 
-//access recentPhotos
-@property (strong, nonatomic) RecentPhotos *recentPhotos;
-
 @end

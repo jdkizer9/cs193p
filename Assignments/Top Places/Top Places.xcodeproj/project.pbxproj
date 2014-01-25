@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		485059411893553B005122DB /* PhotoListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 485059401893553B005122DB /* PhotoListTVC.m */; };
+		48505944189358E0005122DB /* PhotoListForRecentsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 48505943189358E0005122DB /* PhotoListForRecentsTVC.m */; };
 		488766D418906D6D004ABCA7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488766D318906D6D004ABCA7 /* Foundation.framework */; };
 		488766D618906D6D004ABCA7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488766D518906D6D004ABCA7 /* CoreGraphics.framework */; };
 		488766D818906D6D004ABCA7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488766D718906D6D004ABCA7 /* UIKit.framework */; };
@@ -41,6 +43,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4850593F1893553B005122DB /* PhotoListTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoListTVC.h; sourceTree = "<group>"; };
+		485059401893553B005122DB /* PhotoListTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoListTVC.m; sourceTree = "<group>"; };
+		48505942189358E0005122DB /* PhotoListForRecentsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoListForRecentsTVC.h; sourceTree = "<group>"; };
+		48505943189358E0005122DB /* PhotoListForRecentsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoListForRecentsTVC.m; sourceTree = "<group>"; };
 		488766D018906D6D004ABCA7 /* Top Places.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Top Places.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		488766D318906D6D004ABCA7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		488766D518906D6D004ABCA7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -139,8 +145,12 @@
 				4887671B18907754004ABCA7 /* TopPlacesTVC.m */,
 				4887671D189077F5004ABCA7 /* TopPlacesListTVC.h */,
 				4887671E189077F5004ABCA7 /* TopPlacesListTVC.m */,
+				4850593F1893553B005122DB /* PhotoListTVC.h */,
+				485059401893553B005122DB /* PhotoListTVC.m */,
 				48D800761891D89000282FE1 /* PhotoListForPlaceTVC.h */,
 				48D800771891D89000282FE1 /* PhotoListForPlaceTVC.m */,
+				48505942189358E0005122DB /* PhotoListForRecentsTVC.h */,
+				48505943189358E0005122DB /* PhotoListForRecentsTVC.m */,
 				488767171890767C004ABCA7 /* ImageViewController.h */,
 				488767181890767C004ABCA7 /* ImageViewController.m */,
 				488766EE18906D6E004ABCA7 /* Images.xcassets */,
@@ -299,7 +309,9 @@
 				4887671C18907754004ABCA7 /* TopPlacesTVC.m in Sources */,
 				488766E418906D6D004ABCA7 /* TopPlacesAppDelegate.m in Sources */,
 				4887671618906E26004ABCA7 /* RecentPhotos.m in Sources */,
+				48505944189358E0005122DB /* PhotoListForRecentsTVC.m in Sources */,
 				4887671318906DF0004ABCA7 /* FlickrFetcher.m in Sources */,
+				485059411893553B005122DB /* PhotoListTVC.m in Sources */,
 				488766E018906D6D004ABCA7 /* main.m in Sources */,
 				48D800781891D89000282FE1 /* PhotoListForPlaceTVC.m in Sources */,
 				48D80075189162AF00282FE1 /* Place.m in Sources */,

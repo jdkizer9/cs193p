@@ -10,11 +10,8 @@
 
 @interface RecentPhotos : NSObject
 
-//access to singleton object
-+ (instancetype)sharedRecentPhotos;
-
-- (void)updateRecentPhotosWithImageDictionary:(NSDictionary*)imageDictionary;
-@property (strong, nonatomic, readonly) NSArray *recentPhotosArray;
++ (NSArray *)recentPhotos;
++ (void)updateRecentPhotosWithImageDictionary:(NSDictionary*)imageDictionary;
 
 #define NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY 20
 

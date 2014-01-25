@@ -14,12 +14,6 @@
 
 @implementation TopPlacesTVC
 
-//access recentPhotos singleton
-- (RecentPhotos *)recentPhotos
-{
-    return [RecentPhotos sharedRecentPhotos];
-}
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
