@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIImage *image;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (nonatomic) BOOL userHasZoomed;
 @end
 
 @implementation ImageViewController
@@ -50,12 +51,12 @@
 {
     self.imageView.image = image; // does not change the frame of the UIImageView
 
-    // had to add these two lines in Shutterbug to fix a bug in "reusing" ImageViewController's MVC
-    self.scrollView.zoomScale = 1.0;
     self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
     // self.scrollView could be nil on the next line if outlet-setting has not happened yet
     self.scrollView.contentSize = self.image ? self.image.size : CGSizeZero;
+    self.userHasZoomed = NO;
+    [self setZoomScaleOfScrollView:self.scrollView forImage:self.image animated:NO];
 
     [self.spinner stopAnimating];
 }
@@ -74,6 +75,42 @@
     self.scrollView.contentSize = self.image ? self.image.size : CGSizeZero;
 }
 
+//this sets the appropriate zoom scale based on scrollView's frame size
+//and the image's size
+- (void)setZoomScaleOfScrollView:(UIScrollView *)scrollView forImage:(UIImage *)image animated:(BOOL)animated
+{
+    //get the scroll view's frame size
+    //this also tells us whether we are in portrait or landscape
+    CGSize scrollViewFrameSize = scrollView.frame.size;
+    CGSize imageSize = image.size;
+    
+    //for width and height, get the frameSize to imageSize ratio
+    CGFloat widthRatio = scrollViewFrameSize.width / imageSize.width;
+    CGFloat heightRatio = scrollViewFrameSize.height / imageSize.height;
+    
+    //set zoomScale to the greater ratio
+    if (animated)
+        [UIView animateWithDuration:0.2
+                              delay:0.0
+                            options:UIViewAnimationOptionBeginFromCurrentState
+                         animations:^{
+                             scrollView.zoomScale = (widthRatio > heightRatio) ? widthRatio : heightRatio;
+                         }
+                         completion:nil];
+    else
+        scrollView.zoomScale = (widthRatio > heightRatio) ? widthRatio : heightRatio;
+    
+    
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
+    if (!self.userHasZoomed)
+        [self setZoomScaleOfScrollView:self.scrollView forImage:self.image animated:YES];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 // mandatory zooming method in UIScrollViewDelegate protocol
@@ -81,6 +118,11 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.imageView;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    self.userHasZoomed = YES;
 }
 
 #pragma mark - Setting the Image from the Image's URL

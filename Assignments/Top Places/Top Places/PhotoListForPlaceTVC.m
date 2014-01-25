@@ -57,8 +57,24 @@
     
     // update UILabels in the UITableViewCell
     // valueForKeyPath: supports "dot notation" to look inside dictionaries at other dictionaries
-    cell.textLabel.text = [photo valueForKeyPath:FLICKR_PHOTO_TITLE];
-    cell.detailTextLabel.text = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+    NSString *title = [[NSString alloc]initWithString:[photo valueForKeyPath:FLICKR_PHOTO_TITLE]];
+    
+    //if title is empty, populate with description
+    if ([title length] == 0)
+    {
+        title = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+        //if no description either, populate with unknown
+        if ([title length] == 0)
+            title = @"Unknown";
+        
+        //clear subtitle
+        cell.detailTextLabel.text = @"";
+    }
+    else
+    {
+        cell.detailTextLabel.text = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+    }
+    cell.textLabel.text = title;
     
     return cell;
 }

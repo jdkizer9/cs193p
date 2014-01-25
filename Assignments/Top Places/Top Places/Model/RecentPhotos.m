@@ -7,10 +7,13 @@
 //
 
 #import "RecentPhotos.h"
+#import "FlickrFetcher.h"
 
 @interface RecentPhotos()
 
 @property (strong, nonatomic) NSMutableArray *recentPhotosMutableArray; //of dictionary entries
+
+#define RECENT_PHOTOS_NSUSERDEFAULTS_KEY @"Recent Photos Array"
 
 @end
 
@@ -24,7 +27,17 @@
 
 - (NSMutableArray *)recentPhotosMutableArray
 {
-    if (!_recentPhotosMutableArray) _recentPhotosMutableArray = [[NSMutableArray alloc]init];
+    //if nil, load from NSUserDefaults
+    if (!_recentPhotosMutableArray)
+    {
+        NSArray *savedRecentPhotosArray = [[NSUserDefaults standardUserDefaults] arrayForKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
+        
+        //if savedRecentPhotosArray is nil, this is the first time running the app
+        if (savedRecentPhotosArray)
+            _recentPhotosMutableArray = [[NSMutableArray alloc]initWithArray:savedRecentPhotosArray];
+        else
+            _recentPhotosMutableArray = [[NSMutableArray alloc]init];
+    }
     return _recentPhotosMutableArray;
 }
 
@@ -38,27 +51,53 @@
     return sharedRecentPhotos;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self)
-    {
-        //load recentPhotosArray with values from NSUserDefaults
-        
-    }
-    return self;
-}
-
 - (void)updateRecentPhotosWithImageDictionary:(NSDictionary*)imageDictionary
 {
-    //if imageDictionary is in recentPhotosArray, remove it from the array and
-    //add it to the front of the array
+    //determine if imageDictionary is in the recentPhotosArray
+    BOOL foundImageDictionaryInRecentPhotosArray = NO;
+    NSDictionary *foundPhoto = nil;
+    for (id obj in self.recentPhotosArray)
+    {
+        if ([obj isKindOfClass:[NSDictionary class]])
+        {
+            NSDictionary *recentPhoto = (NSDictionary *)obj;
+            //compare FLICKR_PHOTO_ID
+            if ([recentPhoto objectForKey:FLICKR_PHOTO_ID] &&
+                [recentPhoto objectForKey:FLICKR_PHOTO_ID] == [imageDictionary objectForKey:FLICKR_PHOTO_ID])
+            {
+                foundImageDictionaryInRecentPhotosArray = YES;
+                foundPhoto = recentPhoto;
+                break;
+            }
+        }
+    }
     
-    //if imageDictionary is not in recentPhotosArray
-    // - add it to the front of the array
-    // - if recentPhotosArray is at maximum capacity (NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
-    //   - remove the last entry so that there are only
-    //     NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY dictionaries in the arrray
+    
+    if (foundImageDictionaryInRecentPhotosArray)
+    {
+        //if imageDictionary is in recentPhotosArray, remove it from the array and
+        //add it to the front of the array
+        [self.recentPhotosMutableArray removeObject:foundPhoto];
+        [self.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
+    }
+    else
+    {
+        //if imageDictionary is not in recentPhotosArray
+        // - add it to the front of the array
+        // - if recentPhotosArray is at maximum capacity (NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
+        //   - remove the last entry so that there are only
+        //     NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY dictionaries in the arrray
+        [self.recentPhotosMutableArray insertObject:imageDictionary atIndex:0];
+        if ([self.recentPhotosMutableArray count] > NUMBER_OF_RECENT_PHOTOS_TO_DISPLAY)
+            [self.recentPhotosMutableArray removeLastObject];
+    }
+    
+    //update user defaults
+    //[[NSUserDefaults standardUserDefaults] arrayForKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
+    [[NSUserDefaults standardUserDefaults] setObject:[[NSArray alloc] initWithArray:self.recentPhotosMutableArray] forKey:RECENT_PHOTOS_NSUSERDEFAULTS_KEY];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 }
 
 
