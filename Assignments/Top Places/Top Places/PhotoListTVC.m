@@ -88,6 +88,26 @@
     [self fetchPhotos];
 }
 
+
+#pragma mark - UITableViewDelegate
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //this obtains the detail viewController in a splitViewController
+    //if the current viewController is not in a splitViewController, detail will be nil
+    id detail = self.splitViewController.viewControllers[1];
+    //remember, our detail is a UINavigationController
+    if ([detail isKindOfClass:[UINavigationController class]])
+    {
+        UINavigationController *nav = (UINavigationController *)detail;
+        //viewController 0 in a UINavicationController is the root
+        id ivc = [nav.viewControllers firstObject];
+        if ([ivc isKindOfClass:[ImageViewController class]])
+            [self prepareImageViewController:ivc
+                              toDisplayPhoto:self.photos[indexPath.row]];
+    }
+}
+
 #pragma mark - Navigation
 
 // prepares the given ImageViewController to show the given photo

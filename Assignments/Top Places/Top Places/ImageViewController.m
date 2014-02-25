@@ -8,7 +8,7 @@
 
 #import "ImageViewController.h"
 
-@interface ImageViewController () <UIScrollViewDelegate, UISplitViewControllerDelegate>
+@interface ImageViewController () <UIScrollViewDelegate, UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImage *image;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -49,16 +49,27 @@
 
 - (void)setImage:(UIImage *)image
 {
-    self.imageView.image = image; // does not change the frame of the UIImageView
-
-    self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    
-    // self.scrollView could be nil on the next line if outlet-setting has not happened yet
-    self.scrollView.contentSize = self.image ? self.image.size : CGSizeZero;
-    self.userHasZoomed = NO;
-    [self setZoomScaleOfScrollView:self.scrollView forImage:self.image animated:NO];
-
-    [self.spinner stopAnimating];
+    if (image)
+    {
+        self.imageView.image = image; // does not change the frame of the UIImageView
+        
+        self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+        
+        // self.scrollView could be nil on the next line if outlet-setting has not happened yet
+        self.scrollView.contentSize = self.image ? self.image.size : CGSizeZero;
+        self.userHasZoomed = NO;
+        [self setZoomScaleOfScrollView:self.scrollView forImage:self.image animated:NO];
+        
+        [self.spinner stopAnimating];
+    }
+    else
+    {
+        self.scrollView.zoomScale = 1.0;
+        self.imageView.image = nil;
+        self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+        self.scrollView.contentSize = self.image ? self.image.size : CGSizeZero;
+        //[self.spinner startAnimating];
+    }
 }
 
 - (void)setScrollView:(UIScrollView *)scrollView
@@ -168,6 +179,19 @@
     }
 }
 
+#pragma mark - UIPopoverControllerDelegate
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+    id master = popoverController.contentViewController;
+    
+    if ([master isKindOfClass:[UITabBarController class]])
+        self.navigationItem.leftBarButtonItem.title = [self getNavigationTitleFromTabBarController:(UITabBarController *)master];
+    
+    return YES;
+    
+}
+
+
 #pragma mark - UISplitViewControllerDelegate
 
 // this section added during Shutterbug demo
@@ -184,17 +208,36 @@
     return UIInterfaceOrientationIsPortrait(orientation);
 }
 
+- (NSString *)getNavigationTitleFromTabBarController:(UITabBarController *)aTabBarController
+{
+    NSString *navTitle = @"";
+    UINavigationController *nav = (UINavigationController *)[aTabBarController selectedViewController];
+    if ([nav isKindOfClass:([UINavigationController class])])
+    {
+        navTitle = [NSString stringWithString:nav.navigationBar.topItem.title];
+    }
+    return navTitle;
+    
+}
+
 - (void)splitViewController:(UISplitViewController *)svc
-     willHideViewController:(UIViewController *)aViewController
+     willHideViewController:(UIViewController *)master
           withBarButtonItem:(UIBarButtonItem *)barButtonItem
        forPopoverController:(UIPopoverController *)pc
 {
-    barButtonItem.title = aViewController.title;
+    
+    //set the UIPopoverController delegate to self
+    pc.delegate = self;
+    //need to extract the title from whatever view controller is up
+    //aViewController will be UITabBarController
+    if ([master isKindOfClass:[UITabBarController class]])
+        barButtonItem.title = [self getNavigationTitleFromTabBarController:(UITabBarController *)master];
+    
     self.navigationItem.leftBarButtonItem = barButtonItem;
 }
 
 - (void)splitViewController:(UISplitViewController *)svc
-     willShowViewController:(UIViewController *)aViewController
+     willShowViewController:(UIViewController *)master
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
     self.navigationItem.leftBarButtonItem = nil;
